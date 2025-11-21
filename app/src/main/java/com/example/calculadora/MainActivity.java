@@ -1,190 +1,210 @@
 package com.example.calculadora;
 
 import android.os.Bundle;
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
-
-import java.util.*;
-import android.widget.Button;
+import android.view.View;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-    private TextView display;
-    private String currentInput = "";
-    private String operator = "";
-    private double firstNumber = 0;
-    private boolean isNewOperation = true;
+
+    Double numero1, numero2, resultado;
+    String operador;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
 
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
-
-        display = findViewById(R.id.display);
-
-        List<Button> Botones_Numericos = new ArrayList<>(Arrays.asList(
-                findViewById(R.id.button17), // 0
-                findViewById(R.id.button1),  // 1
-                findViewById(R.id.button2),  // 2
-                findViewById(R.id.button3),  // 3
-                findViewById(R.id.button4),  // 4
-                findViewById(R.id.button5),  // 5
-                findViewById(R.id.button6),  // 6
-                findViewById(R.id.button14), // 7
-                findViewById(R.id.button9),  // 8
-                findViewById(R.id.button10)  // 9
-        ));
+        findViewById(R.id.button17).setOnClickListener(this::onClickButtonCero);
+        findViewById(R.id.button1).setOnClickListener(this::onClickButtonUno);
+        findViewById(R.id.button9).setOnClickListener(this::onClickButtonDos);
+        findViewById(R.id.button10).setOnClickListener(this::onClickButtonTres);
+        findViewById(R.id.button14).setOnClickListener(this::onClickButtonCuatro);
+        findViewById(R.id.button5).setOnClickListener(this::onClickButtonCinco);
+        findViewById(R.id.button6).setOnClickListener(this::onClickButtonSeis);
+        findViewById(R.id.button4).setOnClickListener(this::onClickButtonSiete);
+        findViewById(R.id.button3).setOnClickListener(this::onClickButtonOcho);
+        findViewById(R.id.button2).setOnClickListener(this::onClickButtonNueve);
 
 
-        Button Mas = findViewById(R.id.button11);
-        Button menos = findViewById(R.id.button7);
-        Button Division = findViewById(R.id.button23);
-        Button Multiplicacion = findViewById(R.id.button13);
-        Button MasoMenos = findViewById(R.id.button16);
-        Button AC = findViewById(R.id.button21);
-        Button Igual = findViewById(R.id.button19);
-        Button Porcentaje = findViewById(R.id.button12);
-        Button Borrar = findViewById(R.id.button20);
-        Button Coma = findViewById(R.id.button18);
+        findViewById(R.id.button18).setOnClickListener(this::onClickButtonPunto);
+        findViewById(R.id.button11).setOnClickListener(this::onClickSuma);
+        findViewById(R.id.button7).setOnClickListener(this::onClickResta);
+        findViewById(R.id.button13).setOnClickListener(this::onClickMultiplicacion);
+        findViewById(R.id.button23).setOnClickListener(this::onClickDivision);
+        findViewById(R.id.button19).setOnClickListener(this::onClickIgual);
+        findViewById(R.id.button21).setOnClickListener(this::onClickLimpia);
+        findViewById(R.id.button20).setOnClickListener(this::onClickBorrar);
+        findViewById(R.id.button12).setOnClickListener(this::onClickPorcentaje);
+        findViewById(R.id.button16).setOnClickListener(this::onClickCambiarSigno);
+    }
 
-        for (Button boton : Botones_Numericos) {
-            boton.setOnClickListener(v -> {
-                String numero = ((Button) v).getText().toString();
-                appendNumber(numero);
-            });
+
+    public void onClickButtonUno(View miView) {
+        TextView pantalla = findViewById(R.id.display);
+        pantalla.setText(pantalla.getText() + "1");
+    }
+
+    public void onClickButtonDos(View miView) {
+        TextView pantalla = findViewById(R.id.display);
+        pantalla.setText(pantalla.getText() + "2");
+    }
+
+    public void onClickButtonTres(View miView) {
+        TextView pantalla = findViewById(R.id.display);
+        pantalla.setText(pantalla.getText() + "3");
+    }
+
+    public void onClickButtonCuatro(View miView) {
+        TextView pantalla = findViewById(R.id.display);
+        pantalla.setText(pantalla.getText() + "4");
+    }
+
+    public void onClickButtonCinco(View miView) {
+        TextView pantalla = findViewById(R.id.display);
+        pantalla.setText(pantalla.getText() + "5");
+    }
+
+    public void onClickButtonSeis(View miView) {
+        TextView pantalla = findViewById(R.id.display);
+        pantalla.setText(pantalla.getText() + "6");
+    }
+
+    public void onClickButtonSiete(View miView) {
+        TextView pantalla = findViewById(R.id.display);
+        pantalla.setText(pantalla.getText() + "7");
+    }
+
+    public void onClickButtonOcho(View miView) {
+        TextView pantalla = findViewById(R.id.display);
+        pantalla.setText(pantalla.getText() + "8");
+    }
+
+    public void onClickButtonNueve(View miView) {
+        TextView pantalla = findViewById(R.id.display);
+        pantalla.setText(pantalla.getText() + "9");
+    }
+
+    public void onClickButtonCero(View miView) {
+        TextView pantalla = findViewById(R.id.display);
+        pantalla.setText(pantalla.getText() + "0");
+    }
+
+    public void onClickButtonPunto(View miView) {
+        TextView pantalla = findViewById(R.id.display);
+        String valor = pantalla.getText().toString();
+        if (!valor.contains(".")) {
+            pantalla.setText(valor + ".");
+        }
+    }
+
+    public void onClickOperacionCapturaNumero1(View miView) {
+        TextView pantalla = findViewById(R.id.display);
+        String valor = pantalla.getText().toString();
+        if (!valor.isEmpty() && !valor.equals("-")) {
+            try {
+                numero1 = Double.parseDouble(valor);
+                pantalla.setText("");
+            } catch (NumberFormatException e) {
+                pantalla.setText("");
+            }
+        }
+    }
+
+    public void onClickSuma(View miView) {
+        operador = "+";
+        onClickOperacionCapturaNumero1(miView);
+    }
+
+    public void onClickResta(View miView) {
+        operador = "-";
+        onClickOperacionCapturaNumero1(miView);
+    }
+
+    public void onClickMultiplicacion(View miView) {
+        operador = "*";
+        onClickOperacionCapturaNumero1(miView);
+    }
+
+    public void onClickDivision(View miView) {
+        operador = "/";
+        onClickOperacionCapturaNumero1(miView);
+    }
+
+    public void onClickIgual(View miView) {
+        TextView pantalla = findViewById(R.id.display);
+        String valor = pantalla.getText().toString();
+
+        if (numero1 == null || operador == null || valor.isEmpty() || valor.equals("-")) {
+            return;
         }
 
+        try {
+            numero2 = Double.parseDouble(valor);
 
-        Coma.setOnClickListener(v -> {
-            if (currentInput.isEmpty()) {
-                appendNumber("0.");
-            } else if (!currentInput.contains(".")) {
-                appendNumber(".");
-            }
-        });
-
-
-        Mas.setOnClickListener(v -> setOperator("+"));
-        menos.setOnClickListener(v -> setOperator("-"));
-        Multiplicacion.setOnClickListener(v -> setOperator("×"));
-        Division.setOnClickListener(v -> setOperator("÷"));
-        Igual.setOnClickListener(v -> calculateResult());
-        AC.setOnClickListener(v -> clearAll());
-
-        Borrar.setOnClickListener(v -> {
-            if (!currentInput.isEmpty()) {
-                currentInput = currentInput.substring(0, currentInput.length() - 1);
-                if (currentInput.isEmpty()) {
-                    display.setText("0");
-                    isNewOperation = true;
-                } else {
-                    display.setText(currentInput);
+            if (operador.equals("+")) {
+                resultado = numero1 + numero2;
+            } else if (operador.equals("-")) {
+                resultado = numero1 - numero2;
+            } else if (operador.equals("*")) {
+                resultado = numero1 * numero2;
+            } else if (operador.equals("/")) {
+                if (numero2 == 0) {
+                    pantalla.setText("");
                 }
+                resultado = numero1 / numero2;
             }
-        });
 
-        MasoMenos.setOnClickListener(v -> {
-            if (!currentInput.isEmpty() && !currentInput.equals("0")) {
-                if (currentInput.startsWith("-")) {
-                    currentInput = currentInput.substring(1);
-                } else {
-                    currentInput = "-" + currentInput;
-                }
-                display.setText(currentInput);
-            }
-        });
-
-        Porcentaje.setOnClickListener(v -> {
-            if (!currentInput.isEmpty()) {
-                double value = Double.parseDouble(currentInput);
-                value = value / 100;
-                currentInput = formatResult(value);
-                display.setText(currentInput);
-                isNewOperation = true;
-            }
-        });
-    }
-
-
-    private void appendNumber(String num) {
-        if (isNewOperation) {
-            currentInput = num.equals(".") ? "0." : num;
-            isNewOperation = false;
-        } else {
-            currentInput += num;
-        }
-        display.setText(currentInput);
-    }
-
-    private void setOperator(String op) {
-        if (!currentInput.isEmpty()) {
-            firstNumber = Double.parseDouble(currentInput);
-            operator = op;
-            isNewOperation = true;
-            display.setText(currentInput + " " + op + " ");
+            pantalla.setText(resultado.toString());
+            numero1 = resultado;
+            operador = null;
+        } catch (NumberFormatException e) {
+            pantalla.setText("0");
         }
     }
 
-    private void calculateResult() {
-        if (!currentInput.isEmpty() && !operator.isEmpty()) {
-            double secondNumber = Double.parseDouble(currentInput);
-            double result = 0;
+    public void onClickLimpia(View miView) {
+        numero1 = 0.0;
+        numero2 = 0.0;
+        operador = null;
+        TextView pantalla = findViewById(R.id.display);
+        pantalla.setText("0");
+    }
 
-            switch (operator) {
-                case "+":
-                    result = firstNumber + secondNumber;
-                    break;
-                case "-":
-                    result = firstNumber - secondNumber;
-                    break;
-                case "×":
-                    result = firstNumber * secondNumber;
-                    break;
-                case "÷":
-                    if (secondNumber != 0) {
-                        result = firstNumber / secondNumber;
-                    } else {
-                        display.setText("Error");
-                        clearAll();
-                        return;
-                    }
-                    break;
-            }
-
-            currentInput = formatResult(result);
-            display.setText(currentInput);
-            operator = "";
-            isNewOperation = true;
+    public void onClickBorrar(View miView) {
+        TextView pantalla = findViewById(R.id.display);
+        String valor = pantalla.getText().toString();
+        if (valor.length() > 0 && !valor.equals("0")) {
+            pantalla.setText(valor.substring(0, valor.length() - 1));
+        }
+        if (pantalla.getText().toString().isEmpty()) {
+            pantalla.setText("");
         }
     }
 
-    private void clearAll() {
-        currentInput = "";
-        operator = "";
-        firstNumber = 0;
-        isNewOperation = true;
-        display.setText("0");
+    public void onClickPorcentaje(View miView) {
+        TextView pantalla = findViewById(R.id.display);
+        String valor = pantalla.getText().toString();
+        if (!valor.isEmpty() && !valor.equals("-")) {
+            try {
+                double numero = Double.parseDouble(valor);
+                pantalla.setText(String.valueOf(numero / 100.0));
+            } catch (NumberFormatException e) {
+                pantalla.setText("");
+            }
+        }
     }
 
-    private String formatResult(double value) {
-        if (value == (long) value) {
-            return String.valueOf((long) value);
-        } else {
-            return String.valueOf(value);
+    public void onClickCambiarSigno(View miView) {
+        TextView pantalla = findViewById(R.id.display);
+        String valor = pantalla.getText().toString();
+        if (!valor.isEmpty() && !valor.equals("0")) {
+            if (valor.startsWith("-")) {
+                pantalla.setText(valor.substring(1));
+            } else {
+                pantalla.setText("-" + valor);
+            }
         }
     }
 }
